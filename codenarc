@@ -1,10 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-SLF4J_JAR=/opt/slf4j-$SLF4J_VERSION/slf4j-api-$SLF4J_VERSION.jar:/opt/slf4j-$SLF4J_VERSION/slf4j-simple-$SLF4J_VERSION.jar
-GMETRICS_JAR=/opt/GMetrics-$GMETRICS_VERSION/GMetrics-$GMETRICS_VERSION.jar
-CODENARC_JAR=/opt/CodeNarc-$CODENARC_VERSION/CodeNarc-$CODENARC_VERSION.jar
-GROOVY_JAR=$GROOVY_HOME/embeddable/groovy-all-$GROOVY_VERSION.jar
+export REQUIRED_JAR=""
+export REQUIRED_JAR=${REQUIRED_JAR}:/opt/slf4j-$SLF4J_VERSION/slf4j-api-$SLF4J_VERSION.jar
+export REQUIRED_JAR=${REQUIRED_JAR}:/opt/slf4j-$SLF4J_VERSION/slf4j-simple-$SLF4J_VERSION.jar
+export REQUIRED_JAR=${REQUIRED_JAR}:/opt/GMetrics-$GMETRICS_VERSION/GMetrics-$GMETRICS_VERSION.jar
+export REQUIRED_JAR=${REQUIRED_JAR}:/opt/CodeNarc-$CODENARC_VERSION/CodeNarc-$CODENARC_VERSION.jar
 
-java \
-  -classpath "$SLF4J_JAR:$GMETRICS_JAR:$CODENARC_JAR:$GROOVY_JAR" \
-  org.codenarc.CodeNarc "$@"
+export GROOVY_JAR=""
+export GROOVY_JAR=${GROOVY_JAR}:${GROOVY_HOME}/lib/groovy-${GROOVY_VERSION}.jar
+export GROOVY_JAR=${GROOVY_JAR}:${GROOVY_HOME}/lib/groovy-templates-${GROOVY_VERSION}.jar
+export GROOVY_JAR=${GROOVY_JAR}:${GROOVY_HOME}/lib/groovy-xml-${GROOVY_VERSION}.jar
+
+export CLASSPATH=${GROOVY_JAR}:${REQUIRED_JAR}
+
+java -classpath ${CLASSPATH} org.codenarc.CodeNarc "$@"
